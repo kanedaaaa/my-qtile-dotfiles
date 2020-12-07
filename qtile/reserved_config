@@ -1,0 +1,126 @@
+from typing import List  # noqa: F401
+
+from libqtile import bar, layout, widget
+from libqtile.config import Click, Drag, Group, Key, Screen
+from libqtile.lazy import lazy
+from libqtile.utils import guess_terminal
+
+mod = "mod4"
+terminal = guess_terminal()
+
+keys = [
+         Key([mod], 'space', lazy.layout.next()),
+         Key([mod], 'Tab', lazy.next_layout()),
+                
+         Key([mod], 'h', lazy.layout.up()),
+         Key([mod], 'l', lazy.layout.down()),
+         Key([mod], 'j', lazy.layout.left()),
+         Key([mod], 'k', lazy.layout.right()),
+
+         Key([mod, 'shift'], 'h', lazy.layout.shuffle_up()),
+         Key([mod, 'shift'], 'l', lazy.layout.shuffle_down()),
+         Key([mod, 'shift'], 'j', lazy.layout.shuffle_left()),
+         Key([mod, 'shift'], 'k', lazy.layout.shuffle_right()),
+
+         Key([mod], '=', lazy.layout.grow()),
+         Key([mod], '-', lazy.layout.shrink()),
+         Key([mod], 'i', lazy.layout.normalize()),
+         Key([mod], 'o', lazy.layout.maximize()),
+
+         Key([mod], 'q', lazy.window.kill()),
+
+         Key([mod, 'control'], 'r', lazy.restart()),
+
+         Key([mod, 'shift'], 'j', lazy.layout.swap_left()),
+         Key([mod, 'shift'], 'k', lazy.layout.swap_right()),
+
+         Key([mod], 'Return', lazy.spawn('alacritty')),
+        ]
+
+groups = [Group(i) for i in "qwertyuiop"]
+
+for i in groups:
+    keys.extend([
+                Key([mod], i.name, lazy.group[i.name].toscreen()),
+                Key([mod, "shift"], i.name, lazy.window.togroup(i.name, switch_group=True))])
+
+
+layout_theme = {
+        "border_width":2,
+        "margin":5,
+        "border_focus":"007fcf",
+        "border_normal":"1D2330"
+        }
+
+layouts = [
+        layout.MonadTall(**layout_theme),
+        layout.MonadWide(**layout_theme)
+        ]
+widget_defaults = dict(
+            font='sans',
+            fontsize=12,
+            padding=3,
+        )
+extension_defaults = widget_defaults.copy()
+
+mouse = [
+    Drag([mod], 'Button1', lazy.window.set_position_floating(),
+         start=lazy.window.get_position()),
+    Drag([mod], 'Button3', lazy.window.set_size_floating(),
+         start=lazy.window.get_size()),
+    Click([mod], 'Button2', lazy.window.bring_to_front())
+                    ]
+
+dgroups_key_binder = None
+dgroups_app_rules = []
+main = None
+follow_mouse_focus = False
+bring_front_click = False
+cursor_warp = False
+
+floating_layout = layout.Floating(float_rules=[
+        {'wmclass': 'confirm'},
+        {'wmclass': 'dialog'},
+        {'wmclass': 'download'},
+        {'wmclass': 'error'},
+        {'wmclass': 'file_progress'},
+        {'wmclass': 'notification'},
+        {'wmclass': 'splash'},
+        {'wmclass': 'toolbar'},
+        {'wmclass': 'confirmreset'},  # gitk
+        {'wmclass': 'makebranch'},  # gitk
+        {'wmclass': 'maketag'},  # gitk
+        {'wname': 'branchdialog'},  # gitk
+        {'wname': 'pinentry'},  # GPG key password entry
+        {'wmclass': 'ssh-askpass'},  # ssh-askpass
+                                                        
+        ])
+
+auto_fullscreen = True
+focus_on_window_activation = "smart"
+wmname = "Qtile"
+
+
+creens = [
+            Screen(
+                        bottom=bar.Bar(
+                                        [
+                                                            widget.CurrentLayout(),
+                                                                            widget.GroupBox(),
+                                                                                            widget.Prompt(),
+                                                                                                            widget.WindowName(),
+                                                                                                                            widget.Chord(
+                                                                                                                                                    chords_colors={
+                                                                                                                                                                                'launch': ("#ff0000", "#ffffff"),
+                                                                                                                                                                                                    },
+                                                                                                                                                                        name_transform=lambda name: name.upper(),
+                                                                                                                                                                                        ),
+                                                                                                                                            widget.TextBox("default config", name="default"),
+                                                                                                                                                            widget.Systray(),
+                                                                                                                                                                            widget.Clock(format='%Y-%m-%d %a %I:%M %p'),
+                                                                                                                                                                                            widget.QuickExit(),
+                                                                                                                                                                                                        ],
+                                                    24,
+                                                            ),
+                            ),
+            ]
