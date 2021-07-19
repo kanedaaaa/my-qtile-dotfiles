@@ -201,8 +201,7 @@ screens = [
 
             widget.WindowName(
                     foreground = nord10,
-                    padding = 3
-                    ,
+                    padding = 3,
                     show_state = True,
                     background = nord0,
                     fontsize = 12

@@ -56,7 +56,7 @@ font:
   italic:
     family: Ubuntu mono  
 # The size to use.
-  size: 12
+  size: 11
 
 window:
     # Blank space added around the window in pixels
