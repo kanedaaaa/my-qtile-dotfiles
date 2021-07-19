@@ -3,7 +3,7 @@ configuration {
 	width: 30;
 	lines: 12;
 	show-icons: true;
-	font: "Fira Code Semibold 11";
+	font: "Ubuntu Mono Semibold 11";
 	terminal: "alacritty";
 	disable-history: true;
 	sidebar-mode: true;
