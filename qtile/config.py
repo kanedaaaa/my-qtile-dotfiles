@@ -195,9 +195,9 @@ screens = [
                     disable_drag = False,
             ),
 
-            widget.DebugInfo(
-                    foreground = nord3
-            ),
+#            widget.DebugInfo(
+#                    foreground = nord3
+#            ),
 
             widget.WindowName(
                     foreground = nord10,
